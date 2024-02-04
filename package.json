@@ -2,10 +2,11 @@
   "name": "backend-project",
   "version": "1.0.0",
   "description": "a backend project made with express.js",
-  "main": "index.js",
+  "main": "src/index.js",
+  "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "author": "Dhananjoy Mahata",
   "license": "ISC",
@@ -16,5 +17,9 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3",
+    "prettier": "^3.2.5"
   }
 }
