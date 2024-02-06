@@ -273,7 +273,7 @@ export const updateCoverImage = asyncHandler(async (req, res) => {
 });
 
 
-const userChannelProfile = asyncHandler(async (req, res) => {
+export const userChannelProfile = asyncHandler(async (req, res) => {
     const { username } = req.params;
 
     if (!username?.trim()) {
@@ -340,7 +340,7 @@ const userChannelProfile = asyncHandler(async (req, res) => {
 });
 
 
-const getWatchHistory = asyncHandler(async (req, res) => {
+export const getWatchHistory = asyncHandler(async (req, res) => {
     const user = await User.aggregate([
         {
             $match: { _id: new mongoose.Types.ObjectId(req.user._id) }
