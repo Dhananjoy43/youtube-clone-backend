@@ -133,8 +133,8 @@ export const loginUser = asyncHandler(async (req, res) => {
 // Logout API - remove refresh token from DB and clear cookies
 export const logoutUser = asyncHandler(async (req, res) => {
     await User.findByIdAndUpdate(req.user._id, {
-        $set: {
-            refreshToken: undefined
+        $unset: {
+            refreshToken: 1 //this removes the field from the document
         }
     }, {
         new: true,
@@ -186,7 +186,7 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
 export const changeCurrentPassword = asyncHandler(async (req, res) => {
     const { oldPassword, newPassword } = req.body;
     const user = await User.findById(req.user?._id);
-    const isPasswordCorrect = await User.isPasswordCorrect(oldPassword);
+    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
 
     if (!isPasswordCorrect) {
         throw new ApiError(400, "Invalid  current password!")
@@ -199,14 +199,14 @@ export const changeCurrentPassword = asyncHandler(async (req, res) => {
 });
 
 export const getCurrentUser = asyncHandler(async (req, res) => {
-    return res.status(200).json(200, req.user, "Current user fetched successfully!");
+    return res.status(200).json(new ApiResponse(200, req.user, "Current user fetched successfully!"));
 });
 
 export const UpdateAccountDetails = asyncHandler(async (req, res) => {
     const { username, fullName, email } = req.body;
 
-    if (!username || !fullName || !email) {
-        throw new ApiError(400, "Please provide all the details");
+    if (!(username || fullName || email)) {
+        throw new ApiError(400, "Please provide atleast one field!");
     }
 
     const user = await User.findByIdAndUpdate(req.user?._id,
@@ -251,7 +251,7 @@ export const updateUserAvatar = asyncHandler(async (req, res) => {
 export const updateCoverImage = asyncHandler(async (req, res) => {
     const coverImageLocalPath = req.file?.path;
 
-    if (!avatarLocalPath) {
+    if (!coverImageLocalPath) {
         throw new ApiError(400, "Cover-image file is missing!");
     }
 
