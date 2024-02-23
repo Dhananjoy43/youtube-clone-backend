@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { mongooseAggregatenate } from "mongoose-aggregate-paginate-v2"
+import mongooseAggregatenate from "mongoose-aggregate-paginate-v2"
 
 const commentSchema = new Schema({
     content: {

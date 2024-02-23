@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const tweetSchema = new Schema({
+const comunityPostSchema = new Schema({
     content: {
         type: String,
         required: true
@@ -13,4 +13,4 @@ const tweetSchema = new Schema({
     timestamps: true
 });
 
-export const Tweet = mongoose.model("Tweet", tweetSchema);
+export const ComunityPost = mongoose.model("ComunityPost", comunityPostSchema);
