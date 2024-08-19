@@ -44,8 +44,8 @@ export const registerUser = asyncHandler(async (req, res) => {
         username,
         email,
         fullName,
-        avatar: avatar.url || "", // default value of avatar image is an empty string
-        coverImage: coverImage?.url || "",  // default value of cover image is an empty string
+        avatar: "", // default value of avatar image is an empty string
+        coverImage: "",  // default value of cover image is an empty string
         password
     });
 
