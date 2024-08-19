@@ -56,16 +56,16 @@ export const registerUser = asyncHandler(async (req, res) => {
     const avatar = await uploadOnCloudinary(avatarLocalPath);
     const coverImage = await uploadOnCloudinary(coverImageLocalPath);
 
-    if (!avatar) {
-        throw new ApiError(400, "Avatar is missing!");
-    }
+    // if (!avatar) {
+    //     throw new ApiError(400, "Avatar is missing!");
+    // }
 
     // create user object in db
     const user = await User.create({
         username,
         email,
         fullName,
-        avatar: avatar.url,
+        avatar: avatar.url || "", // default value of avatar image is an empty string
         coverImage: coverImage?.url || "",  // default value of cover image is an empty string
         password
     });
