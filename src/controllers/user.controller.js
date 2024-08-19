@@ -90,43 +90,47 @@ export const registerUser = asyncHandler(async (req, res) => {
 // For login
 export const loginUser = asyncHandler(async (req, res) => {
     const { username, email, password } = req.body;
-    // validate request body fields
-    if ((!username && !email)) {
+
+    // Validate request body fields
+    if (!username && !email) {
         throw new ApiError(400, "Username or Email is required!");
     }
-    // find user by username or email
+
+    // Find user by username or email
     const user = await User.findOne({
         $or: [{ username }, { email }]
     });
 
-    // if no user found with provided credentials
+    // If no user found with provided credentials
     if (!user) {
         throw new ApiError(401, "Invalid Credentials");
     }
 
-    // compare passwords
+    // Compare passwords
     const isMatchedPassword = await user.isPasswordCorrect(password);
     if (!isMatchedPassword) {
         throw new ApiError(401, "Invalid Credentials!");
     }
 
-    // create access & refresh tokens
+    // Create access & refresh tokens
     const { accessToken, refreshToken } = await generateAccessTokenAndRefreshTokens(user._id);
 
-    // save refresh token to the database and set cookie in response header
+    // Save refresh token to the database and set cookie in response header
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
 
     const options = {
         httpOnly: true,
-        secure: true,
-    }
+        secure: process.env.NODE_ENV === "production",
+        sameSite: 'None'
+    };
 
-    // send response
-    res.status(200).cookie("accessToken", accessToken, options).cookie("refreshToken", refreshToken, options).json(new ApiResponse(200, {
-        user: loggedInUser, accessToken, refreshToken
-    },
-        "User logged in successfully!"
-    ));
+    // Send response
+    res.status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(new ApiResponse(200, {
+            user: loggedInUser, accessToken, refreshToken
+        }, "User logged in successfully!"));
 });
 
 
